@@ -3,6 +3,7 @@
 #include <string>
 
 sf::Window window;
+sf::Vector2i window_center;
 
 void InitWindow()
 {
@@ -16,4 +17,6 @@ void InitWindow()
 
     window.create(sf::VideoMode(1120, 630), title, sf::Style::Default, context_settings);
     window.setVerticalSyncEnabled(vertical_sync_enabled);
+
+    window_center = sf::Vector2i(window.getSize() / 2u);
 }

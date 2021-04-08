@@ -56,6 +56,10 @@ int main()
         cout << "shader files not found..." << endl;
     }
 
+    Program prog;
+    prog.AddShader("test.frag", GL_FRAGMENT_SHADER);
+    prog.AddShader("test.vert", GL_VERTEX_SHADER);
+
     VAO vao;
     vao.AddVBO({
     {-2, -2+5, 0},
@@ -117,6 +121,7 @@ int main()
                     if (cursor){
                         cursor = false;
                         window.setMouseCursorVisible(false);
+                        sf::Mouse::setPosition(window_center, window); // For keeping camera angle after returning from ESC mode
                     }
                     else {
                         cursor = true;
@@ -144,6 +149,7 @@ int main()
                     moveDown = false;
                 }
             }
+            /*
             else if (event.type == sf::Event::MouseMoved){
                 if (!cursor){
                     camera.rotation.y -= (event.mouseMove.x - prev_mouse_x) * camRotSpeed;
@@ -154,15 +160,19 @@ int main()
                         camera.rotation.x = -M_PI / 2;
                     prev_mouse_x = event.mouseMove.x;
                     prev_mouse_y = event.mouseMove.y;
+                    cout << "EVENT!" << endl;
                 }
             }
+            */
         }
 
+        /*
         if (!cursor) {
             prev_mouse_x = window.getSize().x / 2;
             prev_mouse_y = window.getSize().y / 2;
-            sf::Mouse::setPosition(sf::Vector2i(prev_mouse_x,prev_mouse_y), window);
+            //sf::Mouse::setPosition(sf::Vector2i(prev_mouse_x,prev_mouse_y), window);
         }
+        */
 
         /* Render here */
         glClearColor(0.6,0.8,1,0.0);
@@ -172,11 +182,11 @@ int main()
         MoveCamera();
 
         model = glm::mat4(1.0);
-        sf::Shader::bind(&shader);
-        //prog.Use(projection * view);
-        shader.setUniform("mvp", sf::Glsl::Mat4(glm::value_ptr(projection * view)));
+        //sf::Shader::bind(&shader);
+        prog.Use(projection * view);
+        //shader.setUniform("mvp", sf::Glsl::Mat4(glm::value_ptr(projection * view)));
         DrawWorld(&camera);
-        sf::Shader::bind(NULL);
+        //sf::Shader::bind(NULL);
         window.display();
     }
 

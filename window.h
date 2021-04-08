@@ -4,6 +4,7 @@
 #include "SFML/Window.hpp"
 
 extern sf::Window window;
+extern sf::Vector2i window_center;
 
 void InitWindow();
 

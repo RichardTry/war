@@ -1,4 +1,7 @@
 #include "camera.h"
+#include "window.h"
+
+#include <iostream>
 
 Transform camera;
 
@@ -13,6 +16,17 @@ float camMoveSpeed = 0.01;
 
 void MoveCamera()
 {
+    if (!cursor){
+        sf::Vector2i delta = (sf::Mouse::getPosition(window) - window_center);
+        camera.rotation.y -= float(delta.x) * camRotSpeed;
+        camera.rotation.x -= float(delta.y) * camRotSpeed;
+        if (camera.rotation.x > M_PI / 2)
+            camera.rotation.x = M_PI / 2;
+        if (camera.rotation.x < -M_PI / 2)
+            camera.rotation.x = -M_PI / 2;
+        sf::Mouse::setPosition(window_center, window);
+    }
+
     if (moveForward) {
         camera.position.x += -sin(camera.rotation.y) * camMoveSpeed;
         camera.position.z += -cos(camera.rotation.y) * camMoveSpeed;

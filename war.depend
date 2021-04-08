@@ -16,7 +16,7 @@
 	<inttypes.h>
 	<stdint.h>
 
-1617852491 source:/home/paxom/codeblocks-projects/war/main.cpp
+1617884695 source:/home/paxom/codeblocks-projects/war/main.cpp
 	<iostream>
 	<cstring>
 	<SFML/Graphics.hpp>
@@ -1087,17 +1087,20 @@
 	"chunk.h"
 	"content.h"
 
-1617735553 /home/paxom/codeblocks-projects/war/window.h
+1617882609 /home/paxom/codeblocks-projects/war/window.h
 	"SFML/Window.hpp"
 
-1617735545 source:/home/paxom/codeblocks-projects/war/window.cpp
+1617882659 source:/home/paxom/codeblocks-projects/war/window.cpp
 	"window.h"
 	<string>
 
-1617844384 source:/home/paxom/codeblocks-projects/war/camera.cpp
+1617884561 source:/home/paxom/codeblocks-projects/war/camera.cpp
 	"camera.h"
+	"window.h"
+	<iostream>
 
-1617844724 /home/paxom/codeblocks-projects/war/camera.h
+1617881530 /home/paxom/codeblocks-projects/war/camera.h
+	<SFML/Window.hpp>
 	"transform.h"
 	"glm/gtc/matrix_transform.hpp"
 
