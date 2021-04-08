@@ -16,7 +16,7 @@
 	<inttypes.h>
 	<stdint.h>
 
-1617839441 source:/home/paxom/codeblocks-projects/war/main.cpp
+1617852491 source:/home/paxom/codeblocks-projects/war/main.cpp
 	<iostream>
 	<cstring>
 	<SFML/Graphics.hpp>
@@ -27,6 +27,7 @@
 	<unordered_set>
 	"window.h"
 	"transform.h"
+	"camera.h"
 	"vao.h"
 	"obj-loader/objloader.h"
 	"program.h"
@@ -970,7 +971,7 @@
 	<intrin.h>
 	<arm_neon.h>
 
-1616457621 source:/home/paxom/codeblocks-projects/war/program.cpp
+1617845980 source:/home/paxom/codeblocks-projects/war/program.cpp
 	"program.h"
 	<iostream>
 	<cstdlib>
@@ -993,7 +994,7 @@
 	<GLFW/glfw3.h>
 	<stdexcept>
 
-1617840017 source:/home/paxom/codeblocks-projects/war/chunk.cpp
+1617852620 source:/home/paxom/codeblocks-projects/war/chunk.cpp
 	"chunk.h"
 	"world.h"
 	<iostream>

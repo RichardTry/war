@@ -39,7 +39,6 @@
 		</Compiler>
 		<Linker>
 			<Add library="GL" />
-			<Add library="glfw" />
 			<Add library="dl" />
 			<Add library="sfml-graphics" />
 			<Add library="sfml-window" />
@@ -47,6 +46,8 @@
 			<Add library="tgui" />
 			<Add library="lua/liblua53.so" />
 		</Linker>
+		<Unit filename="camera.cpp" />
+		<Unit filename="camera.h" />
 		<Unit filename="chunk.cpp" />
 		<Unit filename="chunk.h" />
 		<Unit filename="content.cpp" />

@@ -115,9 +115,9 @@ void Chunk::Recalculate()
 
     std::vector<glm::vec3> vertexes;
     std::vector<glm::vec3> colors;
-    int x;
+    unsigned int x;
     for (x = 0; x < CHUNK_SIZE; ++x) {
-        int z;
+        unsigned int z;
         for (z = 0; z <= CHUNK_SIZE; ++z) {
             vertexes.push_back({x, height[x][z] - 0.1, z}); colors.push_back({0, rand()%50 / 100.0 + 0.3, 0});
         }
@@ -125,15 +125,15 @@ void Chunk::Recalculate()
             vertexes.push_back({x + 0.5, height[x][z], z + 0.5}); colors.push_back({0.5, rand()%50 / 100.0 + 0.5, 0});
         }
     }
-    for (int z = 0; z <= CHUNK_SIZE; ++z) {
+    for (unsigned int z = 0; z <= CHUNK_SIZE; ++z) {
         vertexes.push_back({x, height[x][z], z}); colors.push_back({0, rand()%50 / 100.0 + 0.1, 1});
     }
     mesh.AddVBO(vertexes);
     mesh.AddVBO(colors);
 
     std::vector<unsigned> indices;
-    for (int x = 0; x < CHUNK_SIZE; ++x){
-        for (int z = 0; z < CHUNK_SIZE; ++z){
+    for (unsigned int x = 0; x < CHUNK_SIZE; ++x){
+        for (unsigned int z = 0; z < CHUNK_SIZE; ++z){
             unsigned i[5] = {x * (CHUNK_SIZE * 2 + 1) + z, x * (CHUNK_SIZE * 2 + 1) + z + 1, x * (CHUNK_SIZE * 2 + 1) + z + CHUNK_SIZE + 1, (x + 1) * (CHUNK_SIZE * 2 + 1) + z, (x + 1) * (CHUNK_SIZE * 2 + 1) + z + 1};
             indices.push_back(i[0]); indices.push_back(i[2]); indices.push_back(i[1]);
             indices.push_back(i[1]); indices.push_back(i[2]); indices.push_back(i[4]);

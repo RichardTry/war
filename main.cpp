@@ -40,15 +40,21 @@ int main()
 
     projection = glm::perspective(glm::radians(90.0f), (float)window.getSize().x / window.getSize().y, 0.1f, 1000.0f);
     view = glm::mat4(1.0f);
+    model = glm::mat4(1.0f);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
 
-    Program prog;
-    prog.AddShader("test.frag", GL_FRAGMENT_SHADER);
-    prog.AddShader("test.vert", GL_VERTEX_SHADER);
-    prog.Use(projection * view);
+    if (!sf::Shader::isAvailable())
+    {
+        cout << "shaders are not available..." << endl;
+    }
+    sf::Shader shader;
+    if (!shader.loadFromFile("test.vert", "test.frag"))
+    {
+        cout << "shader files not found..." << endl;
+    }
 
     VAO vao;
     vao.AddVBO({
@@ -166,10 +172,11 @@ int main()
         MoveCamera();
 
         model = glm::mat4(1.0);
-        prog.Use(projection * view);
+        sf::Shader::bind(&shader);
+        //prog.Use(projection * view);
+        shader.setUniform("mvp", sf::Glsl::Mat4(glm::value_ptr(projection * view)));
         DrawWorld(&camera);
-        glUseProgram(0);
-
+        sf::Shader::bind(NULL);
         window.display();
     }
 
