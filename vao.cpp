@@ -59,7 +59,6 @@ void VAO::Draw()
     {
         glEnableVertexAttribArray(i);
     }
-    //std::cout << "Drawing" << std::endl;
     glDrawElements(GL_TRIANGLES, ebo_len, GL_UNSIGNED_INT, 0);
     for (size_t i = 0; i < vbos.size(); ++i)
     {

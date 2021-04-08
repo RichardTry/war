@@ -10,21 +10,9 @@
 #include "chunk.h"
 #include "content.h"
 
-class World
-{
-    public:
-        std::unordered_map<long long, Chunk> world;
-
-        void initWorld();
-
-    public:
-        World();
-        virtual ~World();
-
-        void addObject(int x, int y, Object & obj);
-
-        void update(const float & dt);
-        void render(sf::RenderTarget * target, Content * content, Transform * camera);
-};
+extern std::unordered_map<long long, Chunk> world;
+void AddObject(int x, int y, Object & obj);
+void UpdateWorld(const float & dt);
+void DrawWorld(Transform * camera);
 
 #endif // WORLD_H

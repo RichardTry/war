@@ -1,9 +1,9 @@
 #ifndef WINDOW_H_INCLUDED
 #define WINDOW_H_INCLUDED
 
-#include "SFML/Graphics.hpp"
+#include "SFML/Window.hpp"
 
-extern sf::RenderWindow window;
+extern sf::Window window;
 
 void InitWindow();
 

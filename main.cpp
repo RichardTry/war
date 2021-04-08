@@ -25,11 +25,9 @@ int prev_mouse_x = 0.0;
 int prev_mouse_y = 0.0;
 
 glm::mat4 model, view, projection;
-float ySpeed = 0.0;
-float G = -0.08;
 Transform camera;
 float camRotSpeed = 0.01;
-float camMoveSpeed = 0.1;
+float camMoveSpeed = 0.01;
 
 GLuint vertexVBO;
 
@@ -75,12 +73,17 @@ int main()
 {
     InitWindow();
 
+    // InitWorld() here?
+    srand(time(0));
+
     gladLoadGL();
 
     projection = glm::perspective(glm::radians(90.0f), (float)window.getSize().x / window.getSize().y, 0.1f, 1000.0f);
     view = glm::mat4(1.0f);
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
 
     Program prog;
     prog.AddShader("test.frag", GL_FRAGMENT_SHADER);
@@ -105,12 +108,11 @@ int main()
     0, 2, 3
     });
 
-    World world;
     Content content;
     content.initContent("sdsd");
-
-    Chunk s = Chunk(0,0);
-    s.generate(world.world);
+    camera.position.z += 30;
+    camera.position.x += 16;
+    camera.position.y += 5;
 
     bool running = true;
     while (running)
@@ -204,12 +206,11 @@ int main()
         MoveCamera();
 
         model = glm::mat4(1.0);
-        prog.Use(projection * view * model);
-        s.render(&window, &content);
-        world.render(&window, &content, &camera);
-        model = glm::translate(glm::mat4(1.0), glm::vec3(0, 1, -12));
+        prog.Use(projection * view);
+        DrawWorld(&camera);
         glUseProgram(0);
 
+        //window.display();
         window.display();
     }
 

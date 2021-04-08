@@ -2,7 +2,7 @@
 
 #include <string>
 
-sf::RenderWindow window;
+sf::Window window;
 
 void InitWindow()
 {

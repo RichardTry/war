@@ -15,6 +15,8 @@ class VAO
 
     public:
         VAO();
+        VAO(const VAO&) = delete;
+        //void operator=( const VAO& ) = delete;
         ~VAO();
 
         void Bind();

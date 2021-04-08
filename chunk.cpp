@@ -1,13 +1,21 @@
 #include "chunk.h"
+#include "world.h"
 #include <iostream>
+
+Chunk::~Chunk()
+{
+
+}
 
 Chunk::Chunk()
 {
+    //std::cout << "Constructor 1" << std::endl;
     generated = false;
 }
 
 Chunk::Chunk(int x, int y)
 {
+    //std::cout << "Constructor 2" << std::endl;
     position.x = x;
     position.y = y;
     perlinVector.x = rand() % (CHUNK_FACTOR + 1) - CHUNK_FACTOR / 2;
@@ -20,12 +28,12 @@ long long coordsToKey(int x, int y)
     return (((long long)x) << 32) + (long long)y;
 }
 
-void Chunk::render(sf::RenderTarget * target, Content * content)
+void Chunk::Draw()
 {
     mesh.Draw();
 }
 
-void Chunk::generate(std::unordered_map<long long, Chunk> & world)
+void Chunk::Generate()
 {
     long long keyRight = coordsToKey(position.x + 1, position.y);
     long long keyBottom = coordsToKey(position.x, position.y + 1);
@@ -33,30 +41,33 @@ void Chunk::generate(std::unordered_map<long long, Chunk> & world)
 
     sf::Vector2i perlinVectorRight, perlinVectorBottom, perlinVectorBottomRight;
 
-    auto it = world.find(keyRight);
-    if (it != world.end())
-        perlinVectorRight = (it->second.perlinVector);
+    if (world.find(keyRight) != world.end())
+        perlinVectorRight = world[keyRight].perlinVector;
     else
     {
-        world[keyRight] = Chunk(position.x + 1, position.y);
+        world.emplace(std::piecewise_construct,
+            std::forward_as_tuple(keyRight),
+            std::forward_as_tuple(position.x + 1, position.y));
         perlinVectorRight = world[keyRight].perlinVector;
     }
 
-    it = world.find(keyBottom);
-    if (it != world.end())
-        perlinVectorBottom = (it->second.perlinVector);
+    if (world.find(keyBottom) != world.end())
+        perlinVectorBottom = world[keyBottom].perlinVector;
     else
     {
-        world[keyBottom] = Chunk(position.x, position.y + 1);
+        world.emplace(std::piecewise_construct,
+            std::forward_as_tuple(keyBottom),
+            std::forward_as_tuple(position.x, position.y + 1));
         perlinVectorBottom = world[keyBottom].perlinVector;
     }
 
-    it = world.find(keyBottomRight);
-    if (it != world.end())
-        perlinVectorBottomRight = (it->second.perlinVector);
+    if (world.find(keyBottomRight) != world.end())
+        perlinVectorBottomRight = world[keyBottomRight].perlinVector;
     else
     {
-        world[keyBottomRight] = Chunk(position.x + 1, position.y + 1);
+        world.emplace(std::piecewise_construct,
+            std::forward_as_tuple(keyBottomRight),
+            std::forward_as_tuple(position.x + 1, position.y + 1));
         perlinVectorBottomRight = world[keyBottomRight].perlinVector;
     }
 
@@ -95,10 +106,10 @@ void Chunk::generate(std::unordered_map<long long, Chunk> & world)
             if (res == 8) tiles[x][y].type = "snow";
         }
     generated = true;
-    recalculate();
+    Recalculate();
 }
 
-void Chunk::recalculate()
+void Chunk::Recalculate()
 {
     mesh.Clear();
 
