@@ -50,6 +50,8 @@ void MoveCamera()
         camera.position.y -= camMoveSpeed;
     }
 
+    view = glm::mat4(1.0);
+    view = glm::translate(view, glm::vec3(0, 0, -10));
     view = glm::rotate(view, camera.rotation.x, glm::vec3(-1.0f, 0.0f, 0.0f));
     view = glm::rotate(view, camera.rotation.y, glm::vec3(0.0f, -1.0f, 0.0f));
     view = glm::translate(view, glm::vec3(-camera.position.x, -camera.position.y, -camera.position.z));

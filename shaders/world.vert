@@ -5,10 +5,12 @@ layout(location = 1) in vec3 vertexCol;
 
 out vec3 colr;
 
-uniform mat4 mvp;
+uniform mat4 projection;
+uniform mat4 view;
+uniform mat4 model;
 
 void main()
 {
 	colr = vertexCol;
-	gl_Position = mvp * vec4(vertexPos, 1.0);
+	gl_Position = projection * view * model * vec4(vertexPos, 1.0);
 }

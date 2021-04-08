@@ -11,6 +11,8 @@
 #include "content.h"
 
 extern std::unordered_map<long long, Chunk> world;
+
+void InitWorld();
 void AddObject(int x, int y, Object & obj);
 void UpdateWorld(const float & dt);
 void DrawWorld(Transform * camera);

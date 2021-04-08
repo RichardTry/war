@@ -16,21 +16,22 @@
 	<inttypes.h>
 	<stdint.h>
 
-1617884695 source:/home/paxom/codeblocks-projects/war/main.cpp
+1617919811 source:/home/paxom/codeblocks-projects/war/main.cpp
 	<iostream>
 	<cstring>
 	<SFML/Graphics.hpp>
 	<glad/glad.h>
 	"glm/glm.hpp"
 	"glm/gtc/matrix_transform.hpp"
+	"glm/gtc/type_ptr.hpp"
 	<math.h>
 	<unordered_set>
 	"window.h"
+	"shader.h"
 	"transform.h"
 	"camera.h"
 	"vao.h"
 	"obj-loader/objloader.h"
-	"program.h"
 	"content.h"
 	"world.h"
 
@@ -994,7 +995,7 @@
 	<GLFW/glfw3.h>
 	<stdexcept>
 
-1617852620 source:/home/paxom/codeblocks-projects/war/chunk.cpp
+1617917821 source:/home/paxom/codeblocks-projects/war/chunk.cpp
 	"chunk.h"
 	"world.h"
 	<iostream>
@@ -1076,10 +1077,12 @@
 1584655179 source:/home/paxom/codeblocks-projects/war/unit.cpp
 	"unit.h"
 
-1617839976 source:/home/paxom/codeblocks-projects/war/world.cpp
+1617921652 source:/home/paxom/codeblocks-projects/war/world.cpp
 	"world.h"
+	"shader.h"
+	"camera.h"
 
-1617793007 /home/paxom/codeblocks-projects/war/world.h
+1617919433 /home/paxom/codeblocks-projects/war/world.h
 	<SFML/Graphics.hpp>
 	<iostream>
 	<math.h>
@@ -1094,7 +1097,7 @@
 	"window.h"
 	<string>
 
-1617884561 source:/home/paxom/codeblocks-projects/war/camera.cpp
+1617910768 source:/home/paxom/codeblocks-projects/war/camera.cpp
 	"camera.h"
 	"window.h"
 	<iostream>
@@ -1103,4 +1106,7 @@
 	<SFML/Window.hpp>
 	"transform.h"
 	"glm/gtc/matrix_transform.hpp"
+
+1617919803 /home/paxom/codeblocks-projects/war/shader.h
+	"glm/gtc/type_ptr.hpp"
 
