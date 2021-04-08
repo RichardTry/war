@@ -993,7 +993,7 @@
 	<GLFW/glfw3.h>
 	<stdexcept>
 
-1617839945 source:/home/paxom/codeblocks-projects/war/chunk.cpp
+1617840017 source:/home/paxom/codeblocks-projects/war/chunk.cpp
 	"chunk.h"
 	"world.h"
 	<iostream>
@@ -1092,4 +1092,11 @@
 1617735545 source:/home/paxom/codeblocks-projects/war/window.cpp
 	"window.h"
 	<string>
+
+1617844384 source:/home/paxom/codeblocks-projects/war/camera.cpp
+	"camera.h"
+
+1617844724 /home/paxom/codeblocks-projects/war/camera.h
+	"transform.h"
+	"glm/gtc/matrix_transform.hpp"
 
