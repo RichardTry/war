@@ -22,6 +22,7 @@ using namespace std;
 
 int main()
 {
+    //int casda = getchar();
     InitWindow();
 
     // InitWorld() here?
@@ -41,12 +42,12 @@ int main()
         throw std::runtime_error("Shaders are not available");
     }
 
-    //Content content;
-    //content.initContent("sdsd");
+    Content content;
+    content.initContent("test_save");
 
-    camera.position.z += 30;
+    camera.position.z += 16;
     camera.position.x += 16;
-    camera.position.y += 0;
+    camera.position.y += 32;
 
     InitWorld();
 
@@ -63,7 +64,7 @@ int main()
             else if (event.type == sf::Event::Resized){
                 // adjust the viewport when the window is resized
                 glViewport(0, 0, event.size.width, event.size.height);
-                projection = glm::perspective(glm::radians(90.0f), (float)event.size.width / event.size.height, 0.1f, 100.0f);
+                projection = glm::perspective(glm::radians(90.0f), (float)event.size.width / event.size.height, 0.1f, 1000.0f);
                 window_center = sf::Vector2i(window.getSize() / 2u);
             }
             else if (event.type == sf::Event::KeyPressed){

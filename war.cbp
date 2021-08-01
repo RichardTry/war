@@ -59,12 +59,10 @@
 		<Unit filename="object.cpp" />
 		<Unit filename="object.h" />
 		<Unit filename="object_content.h" />
-		<Unit filename="program.cpp" />
-		<Unit filename="program.h" />
+		<Unit filename="shader.h" />
 		<Unit filename="tile.h" />
 		<Unit filename="tile_content.cpp" />
 		<Unit filename="tile_content.h" />
-		<Unit filename="transform.cpp" />
 		<Unit filename="transform.h" />
 		<Unit filename="unit.cpp" />
 		<Unit filename="unit.h" />

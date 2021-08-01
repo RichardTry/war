@@ -1,6 +1,7 @@
 #include "chunk.h"
 #include "world.h"
 #include <iostream>
+using namespace std;
 
 Chunk::~Chunk()
 {
@@ -9,17 +10,15 @@ Chunk::~Chunk()
 
 Chunk::Chunk()
 {
-    //std::cout << "Constructor 1" << std::endl;
     generated = false;
 }
 
 Chunk::Chunk(int x, int y)
 {
-    //std::cout << "Constructor 2" << std::endl;
     position.x = x;
     position.y = y;
-    perlinVector.x = rand() % (CHUNK_FACTOR + 1) - CHUNK_FACTOR / 2;
-    perlinVector.y = rand() % (CHUNK_FACTOR + 1) - CHUNK_FACTOR / 2;
+    perlinVector.x = rand() % (PERLIN_VECTOR_MAX + 1) - PERLIN_VECTOR_MAX / 2;
+    perlinVector.y = rand() % (PERLIN_VECTOR_MAX + 1) - PERLIN_VECTOR_MAX / 2;
     generated = false;
 }
 
@@ -30,7 +29,6 @@ long long coordsToKey(int x, int y)
 
 void Chunk::Draw()
 {
-
     mesh.Draw();
 }
 
@@ -72,8 +70,8 @@ void Chunk::Generate()
         perlinVectorBottomRight = world[keyBottomRight].perlinVector;
     }
 
-    for (uint y = 0; y < CHUNK_SIZE; ++y)
-        for (uint x = 0; x < CHUNK_SIZE; ++x)
+    for (int y = 0; y < CHUNK_SIZE; ++y)
+        for (int x = 0; x < CHUNK_SIZE; ++x)
         {
             int termLeftTop, termLeftBot, termRightBot, termRightTop;
             termLeftTop = perlinVector.x * x + perlinVector.y * y;
@@ -83,31 +81,218 @@ void Chunk::Generate()
 
             float tx = float(x) / (CHUNK_SIZE - 1);
             float ty = float(y) / (CHUNK_SIZE - 1);
-            int xTop = termLeftTop + tx * (termRightTop - termLeftTop);
-            int xBot = termLeftBot + tx * (termRightBot - termLeftBot);
-            int res = xTop + ty * (xBot - xTop);
-            res = std::min(std::max(0, res / 2), 8);
-            height[x][y] = res;
-            if (res == 0) tiles[x][y].type = "water";
-            if (res == 1)
+            float xTop = termLeftTop + tx * (termRightTop - termLeftTop);
+            float xBot = termLeftBot + tx * (termRightBot - termLeftBot);
+            float res = xTop + ty * (xBot - xTop);
+            res = std::min(std::max(0.0f, res / 2), 8.0f);
+            height[x][y] = res * 3;
+            if (res >= 1) tiles[x][y].type = "water";
+            if (res >= 2)
             {
                 tiles[x][y].type = "sand";
                 if (rand() % 20 == 0) objects.push_back(Object(position.x * CHUNK_SIZE + x, position.y * CHUNK_SIZE + y, 0, "palm1"));
             }
-            if (res == 2) tiles[x][y].type = "wet_grass";
-            if (res == 3) tiles[x][y].type = "dry_grass";
-            if (res == 4) tiles[x][y].type = "sand";
-            if (res == 5) tiles[x][y].type = "grass";
-            if (res == 6)
+            if (res >= 3) tiles[x][y].type = "wet_grass";
+            if (res >= 4) tiles[x][y].type = "dry_grass";
+            if (res >= 5) tiles[x][y].type = "sand";
+            if (res >= 6) tiles[x][y].type = "grass";
+            if (res >= 7)
             {
                 tiles[x][y].type = "cold_grass";
                 if (rand() % 5 == 0) objects.push_back(Object(position.x * CHUNK_SIZE + x, position.y * CHUNK_SIZE + y, 0, "tree1"));
             }
-            if (res == 7) tiles[x][y].type = "ice_grass";
-            if (res == 8) tiles[x][y].type = "snow";
+            if (res >= 8) tiles[x][y].type = "ice_grass";
+            if (res >= 9) tiles[x][y].type = "snow";
         }
+
     generated = true;
-    Recalculate();
+
+}
+
+float Chunk::SGetHeight(int x, int z)
+{
+    if (x < 0) {
+        if (z < 0) {
+            long long key = coordsToKey(position.x - 1, position.y - 1);
+            if (world.find(key) != world.end()) {
+                return world[key].height[x % CHUNK_SIZE == 0 ? 0 : CHUNK_SIZE + x % CHUNK_SIZE][z % CHUNK_SIZE == 0 ? 0 : CHUNK_SIZE + z % CHUNK_SIZE];
+            }
+            else {
+                return height[0][0];
+            }
+        }
+        else if (z >= CHUNK_SIZE) {
+            long long key = coordsToKey(position.x - 1, position.y + 1);
+            if (world.find(key) != world.end()) {
+                return world[key].height[x % CHUNK_SIZE == 0 ? 0 : CHUNK_SIZE + x % CHUNK_SIZE][z % CHUNK_SIZE];
+            }
+            else {
+                return height[0][CHUNK_SIZE - 1];
+            }
+        }
+        else {
+            long long key = coordsToKey(position.x - 1, position.y);
+            if (world.find(key) != world.end()) {
+                return world[key].height[x % CHUNK_SIZE == 0 ? 0 : CHUNK_SIZE + x % CHUNK_SIZE][z];
+            }
+            else {
+                return height[0][z];
+            }
+        }
+    }
+    else if (x >= CHUNK_SIZE) {
+        if (z < 0) {
+            long long key = coordsToKey(position.x + 1, position.y - 1);
+            if (world.find(key) != world.end()) {
+                return world[key].height[x % CHUNK_SIZE][z % CHUNK_SIZE == 0 ? 0 : CHUNK_SIZE + z % CHUNK_SIZE];
+            }
+            else {
+                return height[CHUNK_SIZE - 1][0];
+            }
+        }
+        else if (z >= CHUNK_SIZE) {
+            long long key = coordsToKey(position.x + 1, position.y + 1);
+            if (world.find(key) != world.end()) {
+                return world[key].height[x % CHUNK_SIZE][z % CHUNK_SIZE];
+            }
+            else {
+                return height[CHUNK_SIZE - 1][CHUNK_SIZE - 1];
+            }
+        }
+        else {
+            long long key = coordsToKey(position.x + 1, position.y);
+            if (world.find(key) != world.end()) {
+                return world[key].height[x % CHUNK_SIZE][z];
+            }
+            else {
+                return height[CHUNK_SIZE - 1][z];
+            }
+        }
+    }
+    else {
+        if (z < 0) {
+            long long key = coordsToKey(position.x, position.y - 1);
+            if (world.find(key) != world.end()) {
+                return world[key].height[x][z % CHUNK_SIZE == 0 ? 0 : CHUNK_SIZE + z % CHUNK_SIZE];
+            }
+            else {
+                return height[x][0];
+            }
+        }
+        else if (z >= CHUNK_SIZE) {
+            long long key = coordsToKey(position.x, position.y + 1);
+            if (world.find(key) != world.end()) {
+                return world[key].height[x][z % CHUNK_SIZE];
+            }
+            else {
+                return height[x][CHUNK_SIZE - 1];
+            }
+        }
+        else {
+            return height[x][z];
+        }
+    }
+}
+
+////
+////
+////
+////
+////
+////
+
+float Chunk::GetHeight(int x, int z)
+{
+    if (x < 0) {
+        if (z < 0) {
+            long long key = coordsToKey(position.x - 1 - abs((x + 1) / CHUNK_SIZE), position.y - 1 - abs((z + 1) / CHUNK_SIZE));
+            //cout << (x % CHUNK_SIZE == 0 ? 0 : CHUNK_SIZE + x % CHUNK_SIZE) << ";" << (z % CHUNK_SIZE == 0 ? 0 : CHUNK_SIZE + z % CHUNK_SIZE);
+            if (world.find(key) != world.end()) {
+                return world[key].height[x % CHUNK_SIZE == 0 ? 0 : CHUNK_SIZE + x % CHUNK_SIZE][z % CHUNK_SIZE == 0 ? 0 : CHUNK_SIZE + z % CHUNK_SIZE];
+            }
+            else {
+                return height[0][0];
+            }
+        }
+        else if (z >= CHUNK_SIZE) {
+            long long key = coordsToKey(position.x - 1 - abs((x + 1) / CHUNK_SIZE), position.y + z / CHUNK_SIZE);
+            //cout << (x % CHUNK_SIZE == 0 ? 0 : CHUNK_SIZE + x % CHUNK_SIZE) << ";" << (z % CHUNK_SIZE);
+            if (world.find(key) != world.end()) {
+                return world[key].height[x % CHUNK_SIZE == 0 ? 0 : CHUNK_SIZE + x % CHUNK_SIZE][z % CHUNK_SIZE];
+            }
+            else {
+                return height[0][CHUNK_SIZE - 1];
+            }
+        }
+        else {
+            long long key = coordsToKey(position.x - 1 - abs((x + 1) / CHUNK_SIZE), position.y);
+            //cout << (x % CHUNK_SIZE == 0 ? 0 : CHUNK_SIZE + x % CHUNK_SIZE) << ";" << (z);
+            if (world.find(key) != world.end()) {
+                return world[key].height[x % CHUNK_SIZE == 0 ? 0 : CHUNK_SIZE + x % CHUNK_SIZE][z];
+            }
+            else {
+                return height[0][z];
+            }
+        }
+    }
+    else if (x >= CHUNK_SIZE) {
+        if (z < 0) {
+            long long key = coordsToKey(position.x + x / CHUNK_SIZE, position.y - 1 - abs((z + 1) / CHUNK_SIZE));
+            //cout << (x % CHUNK_SIZE) << ";" << (z % CHUNK_SIZE == 0 ? 0 : CHUNK_SIZE + z % CHUNK_SIZE);
+            if (world.find(key) != world.end()) {
+                return world[key].height[x % CHUNK_SIZE][z % CHUNK_SIZE == 0 ? 0 : CHUNK_SIZE + z % CHUNK_SIZE];
+            }
+            else {
+                return height[CHUNK_SIZE - 1][0];
+            }
+        }
+        else if (z >= CHUNK_SIZE) {
+            long long key = coordsToKey(position.x + x / CHUNK_SIZE, position.y + z / CHUNK_SIZE);
+            //cout << (x % CHUNK_SIZE) << ";" << (z % CHUNK_SIZE);
+            if (world.find(key) != world.end()) {
+                return world[key].height[x % CHUNK_SIZE][z % CHUNK_SIZE];
+            }
+            else {
+                return height[CHUNK_SIZE - 1][CHUNK_SIZE - 1];
+            }
+        }
+        else {
+            long long key = coordsToKey(position.x + x / CHUNK_SIZE, position.y);
+            //cout << (x % CHUNK_SIZE) << ";" << (z);
+            if (world.find(key) != world.end()) {
+                return world[key].height[x % CHUNK_SIZE][z];
+            }
+            else {
+                return height[CHUNK_SIZE - 1][z];
+            }
+        }
+    }
+    else {
+        if (z < 0) {
+            long long key = coordsToKey(position.x, position.y - 1 - abs((z + 1) / CHUNK_SIZE));
+            //cout << (x) << ";" << (z % CHUNK_SIZE == 0 ? 0 : CHUNK_SIZE + z % CHUNK_SIZE);
+            if (world.find(key) != world.end()) {
+                return world[key].height[x][z % CHUNK_SIZE == 0 ? 0 : CHUNK_SIZE + z % CHUNK_SIZE];
+            }
+            else {
+                return height[x][0];
+            }
+        }
+        else if (z >= CHUNK_SIZE) {
+            long long key = coordsToKey(position.x, position.y + z / CHUNK_SIZE);
+            //cout << (x) << ";" << (z % CHUNK_SIZE);
+            if (world.find(key) != world.end()) {
+                return world[key].height[x][z % CHUNK_SIZE];
+            }
+            else {
+                return height[x][CHUNK_SIZE - 1];
+            }
+        }
+        else {
+            //cout << (x) << ";" << (z);
+            return height[x][z];
+        }
+    }
 }
 
 void Chunk::Recalculate()
@@ -119,15 +304,47 @@ void Chunk::Recalculate()
     unsigned int x;
     for (x = 0; x < CHUNK_SIZE; ++x) {
         unsigned int z;
+        //	  o o o o .
+        //	   . . . .
+        //	  o o o o .
+        //	   . . . .
+        //	z o o o o .
+        //	^  . . . .
+        //	| o o o o .
+        //	|  . . . .
+        //	| o o o o .
+        //	  -----> x
         for (z = 0; z <= CHUNK_SIZE; ++z) {
-            vertexes.push_back({x, height[x][z] - 0.1, z}); colors.push_back({height[x][z], 0, 1.0-(float)height[x][z]/6});
+            float aver_height = (GetHeight(x-1,z-1) + GetHeight(x-1,z) + GetHeight(x,z-1) + GetHeight(x,z)) / 4.0f;
+            vertexes.push_back({x, aver_height, z}); colors.push_back({aver_height/6, 0,(1.0-aver_height/6)});
         }
+        //	  . . . . .
+        //	   o o o o
+        //	  . . . . .
+        //	   o o o o
+        //	z . . . . .
+        //	^  o o o o
+        //	| . . . . .
+        //	|  o o o o
+        //	| . . . . .
+        //	  -----> x
         for (z = 0; z < CHUNK_SIZE; ++z) {
-            vertexes.push_back({x + 0.5, height[x][z], z + 0.5}); colors.push_back({height[x][z], 0.5, 1.0-(float)height[x][z]/6});
+            vertexes.push_back({x + 0.5, height[x][z], z + 0.5}); colors.push_back({height[x][z]/6, 0.5,(1.0-height[x][z]/6)});
         }
     }
+    //	  . . . . o
+    //	   . . . .
+    //	  . . . . o
+    //	   . . . .
+    //	z . . . . o
+    //	^  . . . .
+    //	| . . . . o
+    //	|  . . . .
+    //	| . . . . o
+    //	  -----> x
     for (unsigned int z = 0; z <= CHUNK_SIZE; ++z) {
-        vertexes.push_back({x, height[x][z], z}); colors.push_back({1.0, 1.0, 1});
+        float aver_height = (GetHeight(CHUNK_SIZE-1,z-1) + GetHeight(CHUNK_SIZE-1,z) + GetHeight(CHUNK_SIZE,z-1) + GetHeight(CHUNK_SIZE,z)) / 4.0f;
+        vertexes.push_back({x, aver_height, z}); colors.push_back({aver_height/6, 0,(1.0-aver_height/6)});
     }
     mesh.AddVBO(vertexes);
     mesh.AddVBO(colors);
@@ -143,4 +360,16 @@ void Chunk::Recalculate()
         }
     }
     mesh.AddEBO(indices);
+
+    sf::Uint8 pixels[32*32*4];
+    for (int x = 0; x < 32; ++x) {
+        for (int z = 0; z < 32; ++z) {
+            pixels[32*z*4 + x*4]     = position.x < 0 ? 64 : 0 + position.y < 0 ? 180 : 0;//tilelib[tiles[x][z].type].texture % 32;
+            pixels[32*z*4 + x*4 + 1] = position.x == 0 ? 64 : 0 + position.y == 0 ? 180 : 0;//tilelib[tiles[x][z].type].texture / 32;
+            pixels[32*z*4 + x*4 + 2] = position.x > 0 ? 64 : 0 + position.y > 0 ? 180 : 0;
+            pixels[32*z*4 + x*4 + 3] = 255;
+        }
+    }
+    textures.create(32, 32);
+    textures.update(pixels);
 }

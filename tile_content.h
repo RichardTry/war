@@ -8,7 +8,7 @@
 class TileContent
 {
     public:
-        sf::Texture * texture;
+        unsigned int texture;
         std::unordered_map<std::string, std::string> string_meta;
         std::unordered_map<std::string, int> int_meta;
         std::unordered_map<std::string, float> float_meta;

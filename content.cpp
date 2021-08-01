@@ -1,12 +1,14 @@
 #include "content.h"
 #include <iostream>
 
-std::string Content::current_mod = "";
+std::string current_mod = "";
 
-std::unordered_map <std::string, sf::Texture> Content::texlib;
-std::unordered_map <std::string, TileContent> Content::tilelib;
-std::unordered_map <std::string, ObjectContent> Content::objlib;
-std::unordered_map <std::string, UnitContent> Content::unitlib;
+sf::Image atlas;
+unsigned int tiles;
+std::unordered_map <std::string, unsigned int> texlib;
+std::unordered_map <std::string, TileContent> tilelib;
+std::unordered_map <std::string, ObjectContent> objlib;
+std::unordered_map <std::string, UnitContent> unitlib;
 
 Content::Content()
 {
@@ -24,16 +26,25 @@ int Content::register_tile(lua_State * L)
     lua_getfield(L, 2, "texture");
     std::string texture = luaL_checkstring(L, -1);
     std::cout << name << " tile registered with ";
-    tilelib[name].texture = new sf::Texture();
-    tilelib[name].texture->loadFromFile("mods/" + current_mod + "/textures/" + texture);
+    //textures.push_back(sf::Texture());
+    //tilelib[name].texture = new sf::Texture();
+    //tilelib[name].texture->loadFromFile("mods/" + current_mod + "/textures/" + texture);
+    //textures[textures.size() - 1].loadFromFile("mods/" + current_mod + "/textures/" + texture);
+    sf::Image image;
+    image.loadFromFile("mods/" + current_mod + "/textures/" + texture);
+
+    atlas.copy(image, 32 * tiles, 0);
+    tilelib[name].texture = tiles;
+    tiles++;
     std::cout << texture << " texture" << std::endl;
     return 1;
 }
 
 int Content::register_object(lua_State * L)
 {
-    std::cout << "lul";
+    std::cout << "Registering object \"";
     std::string name = luaL_checkstring(L, 1);
+    std::cout << name << "\"...\n";
     lua_getfield(L, 2, "texture");
     lua_getfield(L, -1, "up");
     lua_getfield(L, -2, "down");
@@ -53,21 +64,21 @@ int Content::register_object(lua_State * L)
     objlib[name].texture_right = new sf::Texture();
     objlib[name].texture_right->loadFromFile("mods/" + current_mod + "/textures/" + texture_right);
 
-    std::cout << "1\n";
+    std::cout << "size...\n";
     lua_getfield(L, 2, "size");
     lua_getfield(L, -1, "x");
     lua_getfield(L, -2, "y");
     sf::Vector2f spriteSize(lua_tonumber(L, -2), lua_tonumber(L, -1));
     objlib[name].spriteSize = spriteSize;
 
-    std::cout << "3\n";
+    std::cout << "origin...\n";
     lua_getfield(L, 2, "origin");
     lua_getfield(L, -1, "x");
     lua_getfield(L, -2, "y");
     sf::Vector2f spriteOrigin(lua_tonumber(L, -2), lua_tonumber(L, -1));
     objlib[name].spriteOrigin = spriteOrigin;
 
-    std::cout << "2\n";
+    std::cout << "textures: ";
     std::cout << texture_up << ", " << texture_down << ", " << texture_left << ", " << texture_right << std::endl;
 }
 
@@ -86,6 +97,9 @@ void Content::initContent(std::string save)
     lua_pushstring(L, "register_object");
     lua_pushcfunction(L, Content::register_object);
     lua_settable(L, -3);
+
+    atlas.create(1024, 1024);
+    tiles = 0;
 
     std::ifstream ifmods("save/" + save + "/mods.txt");
     if (ifmods.is_open())
@@ -107,8 +121,13 @@ void Content::initContent(std::string save)
 
         }
     }
+    else
+    {
+    std::cout << "No so file for content lol";
+    }
     ifmods.close();
 
+    /*
     std::ifstream ifobj("resources/objects.list");
     if (ifobj.is_open())
     {
@@ -123,7 +142,9 @@ void Content::initContent(std::string save)
         }
     }
 
+
     ifobj.close();
+    */
 
 }
 

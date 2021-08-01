@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "content.h"
+#include "vao.h"
 
 class Object
 {
@@ -11,6 +12,7 @@ class Object
         sf::Vector2i position;
         unsigned char rotation;
         std::string contentID;
+        //VAO mesh;
 
         Object();
         Object(int x, int y, int rot, std::string ID);
