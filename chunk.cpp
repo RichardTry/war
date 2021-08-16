@@ -361,15 +361,15 @@ void Chunk::Recalculate()
     }
     mesh.AddEBO(indices);
 
-    sf::Uint8 pixels[32*32*4];
-    for (int x = 0; x < 32; ++x) {
-        for (int z = 0; z < 32; ++z) {
-            pixels[32*z*4 + x*4]     = position.x < 0 ? 64 : 0 + position.y < 0 ? 180 : 0;//tilelib[tiles[x][z].type].texture % 32;
-            pixels[32*z*4 + x*4 + 1] = position.x == 0 ? 64 : 0 + position.y == 0 ? 180 : 0;//tilelib[tiles[x][z].type].texture / 32;
-            pixels[32*z*4 + x*4 + 2] = position.x > 0 ? 64 : 0 + position.y > 0 ? 180 : 0;
-            pixels[32*z*4 + x*4 + 3] = 255;
+    sf::Uint8 pixels[CHUNK_SIZE*CHUNK_SIZE*4];
+    for (int x = 0; x < CHUNK_SIZE; ++x) {
+        for (int z = 0; z < CHUNK_SIZE; ++z) {
+            pixels[CHUNK_SIZE*z*4 + x*4]     = height[x][z] > 5 ? (int)height[x][z] * 10 : 0; //tilelib[tiles[x][z].type].texture % 32;
+            pixels[CHUNK_SIZE*z*4 + x*4 + 1] = (int)height[x][z] * 5; //tilelib[tiles[x][z].type].texture / 32;
+            pixels[CHUNK_SIZE*z*4 + x*4 + 2] = 0;
+            pixels[CHUNK_SIZE*z*4 + x*4 + 3] = 255;
         }
     }
-    textures.create(32, 32);
+    textures.create(CHUNK_SIZE, CHUNK_SIZE);
     textures.update(pixels);
 }
