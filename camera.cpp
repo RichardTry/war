@@ -1,6 +1,8 @@
+#define _USE_MATH_DEFINES
 #include "camera.h"
 #include "window.h"
-
+#include "world.h"
+#include <cmath>
 #include <iostream>
 
 Transform camera;
@@ -29,29 +31,52 @@ void MoveCamera()
         sf::Mouse::setPosition(window_center, window);
     }
 
-    if (moveForward) {
+    float camera_dx = 0., camera_dy = 0., camera_dz = 0.;
+
+    if (moveForward) 
+    {
+        camera_dx += -sin(camera.rotation.y) * camMoveSpeed;
+        camera_dz += -cos(camera.rotation.y) * camMoveSpeed;
         camera.position.x += -sin(camera.rotation.y) * camMoveSpeed;
         camera.position.z += -cos(camera.rotation.y) * camMoveSpeed;
     }
-    if (moveBack) {
+    if (moveBack) 
+    {
+        camera_dx += sin(camera.rotation.y) * camMoveSpeed;
+        camera_dz += cos(camera.rotation.y) * camMoveSpeed;
         camera.position.x += sin(camera.rotation.y) * camMoveSpeed;
         camera.position.z += cos(camera.rotation.y) * camMoveSpeed;
     }
-    if (moveLeft) {
+    if (moveLeft)
+    {
+        camera_dx += -cos(camera.rotation.y) * camMoveSpeed;
+        camera_dz += sin(camera.rotation.y) * camMoveSpeed;
         camera.position.x += -cos(camera.rotation.y) * camMoveSpeed;
         camera.position.z += sin(camera.rotation.y) * camMoveSpeed;
     }
-    if (moveRight) {
+    if (moveRight)
+    {
+        camera_dx += cos(camera.rotation.y) * camMoveSpeed;
+        camera_dz += -sin(camera.rotation.y) * camMoveSpeed;
         camera.position.x += cos(camera.rotation.y) * camMoveSpeed;
         camera.position.z += -sin(camera.rotation.y) * camMoveSpeed;
     }
-    if (moveUp) {
+    if (moveUp) 
+    {
+        camera_dy += camMoveSpeed;
         camera.position.y += camMoveSpeed;
     }
-    if (moveDown) {
+    if (moveDown) 
+    {
+        camera_dy += -camMoveSpeed;
         camera.position.y -= camMoveSpeed;
     }
-
+    float cameraTileHeight = world[coordsToKey(camera.position.x, camera.position.z)].GetHeight(camera.position.x, camera.position.z);
+    float hDiff = cameraTileHeight + 2.0 - camera.position.y;
+    if (hDiff > 0)
+    {
+        camera.position.y += 0.09 * hDiff;
+    }
     view = glm::mat4(1.0);
     //view = glm::translate(view, glm::vec3(0, 0, -10));
     view = glm::rotate(view, camera.rotation.x, glm::vec3(-1.0f, 0.0f, 0.0f));
