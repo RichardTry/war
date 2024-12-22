@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <fstream>
 #include <functional>
-#include <SFML/Graphics.hpp>
+#include <Terrain/OgreTerrain.h>
 
 #include "tile_content.h"
 #include "object_content.h"
@@ -13,7 +13,7 @@
 
 extern std::string current_mod;
 
-extern sf::Image atlas;
+extern Ogre::Terrain::LayerInstanceList atlas;
 extern unsigned int tiles;
 extern std::unordered_map <std::string, unsigned int> texlib;
 extern std::unordered_map <std::string, TileContent> tilelib;

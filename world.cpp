@@ -1,19 +1,65 @@
 #include "world.h"
-#include "shader.h"
 #include "camera.h"
 
 std::unordered_map<long long, Chunk> world;
 
 sf::Shader world_shader;
-sf::Texture atlas_texture;
+Ogre::TerrainGroup terrain;
 
 void InitWorld()
 {
-    if (!world_shader.loadFromFile("shaders/world.vert", "shaders/world.frag")) {
-        throw std::runtime_error("World shader(s) file(s) not found");
-    }
-    atlas_texture.loadFromImage(atlas);
-    world_shader.setUniform("atlas", atlas_texture);
+    mTerrainGroup = OGRE_NEW TerrainGroup(mSceneMgr, Terrain::ALIGN_X_Z, TERRAIN_SIZE, TERRAIN_WORLD_SIZE);
+}
+
+void setupTerrain()
+{
+    // create our main node to attach our entities to
+    mObjectNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+    mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox", 5000);  // set our skybox
+
+    setupLights();
+    setupControls();
+    
+    // set our camera
+    mCamera->setFOVy(Ogre::Degree(50.0));
+    mCamera->setFOVy(Ogre::Degree(50.0));
+    mCamera->setNearClipDistance(0.01f);
+    mCamera->lookAt(Ogre::Vector3::ZERO);
+    mCameraNode->setPosition(0, 0, 500);
+    mCameraMan->setTopSpeed(100);
+
+    setDragLook(true);
+
+    // Set our camera to orbit around the origin at a suitable distance
+    mCameraMan->setStyle(CS_ORBIT);
+    mCameraMan->setYawPitchDist(Radian(0), Radian(0), 400);
+
+    MaterialManager::getSingleton().setDefaultTextureFiltering(TFO_ANISOTROPIC);
+    MaterialManager::getSingleton().setDefaultAnisotropy(7);
+
+    mSceneMgr->setFog(FOG_LINEAR, ColourValue(0.7, 0.7, 0.8), 0, 4000, 10000);
+
+    mTrayMgr->showCursor();
+    
+    mTerrainGlobals = OGRE_NEW TerrainGlobalOptions();
+
+    mTerrainGroup = OGRE_NEW TerrainGroup(mSceneMgr, Terrain::ALIGN_X_Z, TERRAIN_SIZE, TERRAIN_WORLD_SIZE);
+    mTerrainGroup->setFilenameConvention(TERRAIN_FILE_PREFIX, TERRAIN_FILE_SUFFIX);
+    mTerrainGroup->setOrigin(mTerrainPos);
+    mTerrainGroup->setAutoUpdateLod( TerrainAutoUpdateLodFactory::getAutoUpdateLod(BY_DISTANCE) ); // probably will do it in tessellation stages.
+    
+    Vector3 lightdir(0.55, -0.3, 0.75);
+    lightdir.normalise();
+
+    Light* l = mSceneMgr->createLight("tstLight");
+    l->setType(Light::LT_DIRECTIONAL);
+    l->setDirection(lightdir);
+    l->setDiffuseColour(ColourValue::White);
+    l->setSpecularColour(ColourValue(0.4, 0.4, 0.4));
+
+    configureTerrainDefaults(l);
+
+    mTerrainGroup->freeTemporaryResources();
 }
 
 void AddObject(int x, int y, Object & obj)

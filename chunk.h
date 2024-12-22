@@ -4,10 +4,10 @@
 #include <algorithm>
 #include <vector>
 #include <unordered_map>
+#include <Ogre.h>
 #include "tile.h"
 #include "object.h"
 #include "unit.h"
-#include "vao.h"
 
 #define CHUNK_SIZE 32
 #define PERLIN_VECTOR_MAX 2
@@ -25,7 +25,7 @@ class Chunk
     std::vector<Object> objects;
     std::vector<Unit> units;
 
-    VAO mesh;
+    Ogre::Entity mesh;
 
     Chunk();
     ~Chunk();
@@ -35,7 +35,6 @@ class Chunk
     float SGetHeight(int x, int z);
 
     void Update(const float & dt);
-    void Draw();
     void Generate();
     void Recalculate();
 };

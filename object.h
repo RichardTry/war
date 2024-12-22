@@ -1,10 +1,8 @@
 #ifndef OBJECT_H_INCLUDED
 #define OBJECT_H_INCLUDED
 
-#include <SFML/Graphics.hpp>
-
+#include <Ogre.h>
 #include "content.h"
-#include "vao.h"
 
 class Object
 {
@@ -12,7 +10,7 @@ class Object
         sf::Vector2i position;
         unsigned char rotation;
         std::string contentID;
-        //VAO mesh;
+        Ogre::Entity mesh;
 
         Object();
         Object(int x, int y, int rot, std::string ID);

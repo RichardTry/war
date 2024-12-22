@@ -1,9 +1,10 @@
-#include "content.h"
 #include <iostream>
+#include "content.h"
 
 std::string current_mod = "";
 
-sf::Image atlas;
+// sf::Image atlas;
+Ogre::Terrain::LayerInstanceList atlas;
 unsigned int tiles;
 std::unordered_map <std::string, unsigned int> texlib;
 std::unordered_map <std::string, TileContent> tilelib;
@@ -30,10 +31,11 @@ int Content::register_tile(lua_State * L)
     //tilelib[name].texture = new sf::Texture();
     //tilelib[name].texture->loadFromFile("mods/" + current_mod + "/textures/" + texture);
     //textures[textures.size() - 1].loadFromFile("mods/" + current_mod + "/textures/" + texture);
-    sf::Image image;
-    image.loadFromFile("mods/" + current_mod + "/textures/" + texture);
 
-    atlas.copy(image, 32 * tiles, 0);
+    Ogre::Terrain::LayerInstance layer = Ogre::Terrain::LayerInstance();
+    layer.textureNames.push_back("mods/" + current_mod + "/textures/" + texture);
+    atlas.push_back(layer);
+
     tilelib[name].texture = tiles;
     tiles++;
     std::cout << texture << " texture" << std::endl;
@@ -98,7 +100,6 @@ void Content::initContent(std::string save)
     lua_pushcfunction(L, Content::register_object);
     lua_settable(L, -3);
 
-    atlas.create(1024, 1024);
     tiles = 0;
 
     std::ifstream ifmods("save/" + save + "/mods.txt");

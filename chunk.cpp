@@ -27,11 +27,6 @@ long long coordsToKey(int x, int y)
     return (((long long)x) << 32) + (long long)y;
 }
 
-void Chunk::Draw()
-{
-    mesh.Draw();
-}
-
 void Chunk::Generate()
 {
     long long keyRight = coordsToKey(position.x + 1, position.y);
@@ -297,7 +292,7 @@ float Chunk::GetHeight(int x, int z)
 
 void Chunk::Recalculate()
 {
-    mesh.Clear();
+    // mesh.Clear();
 
     std::vector<glm::vec3> vertexes;
     std::vector<glm::vec3> colors;
@@ -346,8 +341,8 @@ void Chunk::Recalculate()
         float aver_height = (GetHeight(CHUNK_SIZE-1,z-1) + GetHeight(CHUNK_SIZE-1,z) + GetHeight(CHUNK_SIZE,z-1) + GetHeight(CHUNK_SIZE,z)) / 4.0f;
         vertexes.push_back({x, aver_height, z}); colors.push_back({aver_height/6, 0,(1.0-aver_height/6)});
     }
-    mesh.AddVBO(vertexes);
-    mesh.AddVBO(colors);
+    // mesh.AddVBO(vertexes);
+    // mesh.AddVBO(colors);
 
     std::vector<unsigned> indices;
     for (unsigned int x = 0; x < CHUNK_SIZE; ++x){
@@ -359,7 +354,7 @@ void Chunk::Recalculate()
             indices.push_back(i[3]); indices.push_back(i[2]); indices.push_back(i[0]);
         }
     }
-    mesh.AddEBO(indices);
+    // mesh.AddEBO(indices);
 
     sf::Uint8 pixels[CHUNK_SIZE*CHUNK_SIZE*4];
     for (int x = 0; x < CHUNK_SIZE; ++x) {
