@@ -3,3 +3,6 @@ war.layout
 war.depend
 bin/
 obj/
+CMakeCache.txt
+CMakeFiles/
+Makefile
