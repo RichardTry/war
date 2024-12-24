@@ -1,9 +1,8 @@
 #ifndef TILE_CONTENT_H_INCLUDED
 #define TILE_CONTENT_H_INCLUDED
 
+#include <string>
 #include <unordered_map>
-
-#include <SFML/Graphics.hpp>
 
 class TileContent
 {

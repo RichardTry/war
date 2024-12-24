@@ -45,43 +45,43 @@ int main()
     bool running = true;
     // while (running)
     // {
-    //     sf::Event event;
+    //     Event event;
     //     while (window.pollEvent(event))
     //     {
-    //         if (event.type == sf::Event::Closed){
+    //         if (event.type == Event::Closed){
     //             // end the program
     //             running = false;
     //         }
-    //         else if (event.type == sf::Event::Resized){
+    //         else if (event.type == Event::Resized){
     //             // adjust the viewport when the window is resized
     //             glViewport(0, 0, event.size.width, event.size.height);
     //             projection = glm::perspective(glm::radians(90.0f), (float)event.size.width / event.size.height, 0.1f, 1000.0f);
-    //             window_center = sf::Vector2i(window.getSize() / 2u);
+    //             window_center = Ogre::Vector2(window.getSize() / 2u);
     //         }
-    //         else if (event.type == sf::Event::KeyPressed){
-    //             if (event.key.code == sf::Keyboard::W){
+    //         else if (event.type == Event::KeyPressed){
+    //             if (event.key.code == Keyboard::W){
     //                 moveForward = true;
     //             }
-    //             else if (event.key.code == sf::Keyboard::S){
+    //             else if (event.key.code == Keyboard::S){
     //                 moveBack = true;
     //             }
-    //             else if (event.key.code == sf::Keyboard::A){
+    //             else if (event.key.code == Keyboard::A){
     //                 moveLeft = true;
     //             }
-    //             else if (event.key.code == sf::Keyboard::D){
+    //             else if (event.key.code == Keyboard::D){
     //                 moveRight = true;
     //             }
-    //             else if (event.key.code == sf::Keyboard::Space){
+    //             else if (event.key.code == Keyboard::Space){
     //                 moveUp = true;
     //             }
-    //             else if (event.key.code == sf::Keyboard::LShift){
+    //             else if (event.key.code == Keyboard::LShift){
     //                 moveDown = true;
     //             }
-    //             else if (event.key.code == sf::Keyboard::Escape){
+    //             else if (event.key.code == Keyboard::Escape){
     //                 if (cursor){
     //                     cursor = false;
     //                     window.setMouseCursorVisible(false);
-    //                     sf::Mouse::setPosition(window_center, window); // For keeping camera angle after returning from ESC mode
+    //                     Mouse::setPosition(window_center, window); // For keeping camera angle after returning from ESC mode
     //                 }
     //                 else {
     //                     cursor = true;
@@ -89,23 +89,23 @@ int main()
     //                 }
     //             }
     //         }
-    //         else if (event.type == sf::Event::KeyReleased){
-    //             if (event.key.code == sf::Keyboard::W){
+    //         else if (event.type == Event::KeyReleased){
+    //             if (event.key.code == Keyboard::W){
     //                 moveForward = false;
     //             }
-    //             else if (event.key.code == sf::Keyboard::S){
+    //             else if (event.key.code == Keyboard::S){
     //                 moveBack = false;
     //             }
-    //             else if (event.key.code == sf::Keyboard::A){
+    //             else if (event.key.code == Keyboard::A){
     //                 moveLeft = false;
     //             }
-    //             else if (event.key.code == sf::Keyboard::D){
+    //             else if (event.key.code == Keyboard::D){
     //                 moveRight = false;
     //             }
-    //             else if (event.key.code == sf::Keyboard::Space){
+    //             else if (event.key.code == Keyboard::Space){
     //                 moveUp = false;
     //             }
-    //             else if (event.key.code == sf::Keyboard::LShift){
+    //             else if (event.key.code == Keyboard::LShift){
     //                 moveDown = false;
     //             }
     //         }

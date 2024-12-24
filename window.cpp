@@ -2,21 +2,24 @@
 
 #include <string>
 
-sf::Window window;
-sf::Vector2i window_center;
+Ogre::RenderWindow window;
+Ogre::Vector2 window_center;
 
 void InitWindow()
 {
     std::string title = "War";
+    bool fullscreen = false;
     bool vertical_sync_enabled = false;
 
-    sf::ContextSettings context_settings;
-    context_settings.depthBits         = 24; // Request a 24 bits depth buffer
-    context_settings.stencilBits       = 8;  // Request a 8 bits stencil buffer
-    context_settings.antialiasingLevel = 2;  // Request 2 levels of antialiasing
+    // Ogre::RenderSystem context_settings;
+    // context_settings.depthBits         = 24; // Request a 24 bits depth buffer
+    // context_settings.stencilBits       = 8;  // Request a 8 bits stencil buffer
+    // context_settings.antialiasingLevel = 2;  // Request 2 levels of antialiasing
 
-    window.create(sf::VideoMode(1120, 630), title, sf::Style::Default, context_settings);
-    window.setVerticalSyncEnabled(vertical_sync_enabled);
+    // (const String& name, unsigned int widthPt, unsigned int heightPt,
+    //  bool fullScreen, const NameValuePairList *miscParams)
+    window.create(title, 1120, 630, fullscreen, new Ogre::NameValuePairList());
+    window.setVSyncEnabled(vertical_sync_enabled);
 
-    window_center = sf::Vector2i(window.getSize() / 2u);
+    window_center = Ogre::Vector2(window.getWidth() / 2, window.getHeight() / 2);
 }

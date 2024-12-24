@@ -1,17 +1,15 @@
 #ifndef OBJECT_CONTENT_H_INCLUDED
 #define OBJECT_CONTENT_H_INCLUDED
 
-#include <SFML/Graphics.hpp>
-
 struct ObjectContent
 {
-    sf::Texture * texture_up;
-    sf::Texture * texture_down;
-    sf::Texture * texture_left;
-    sf::Texture * texture_right;
-    sf::Vector2f spriteSize;
-    sf::Vector2f spriteOrigin;
-    //sf::Vector2u collision;
+    Ogre::Texture * texture_up;
+    Ogre::Texture * texture_down;
+    Ogre::Texture * texture_left;
+    Ogre::Texture * texture_right;
+    Ogre::Vector2f spriteSize;
+    Ogre::Vector2f spriteOrigin;
+    //Vector2u collision;
     //Vector2u collisionOrigin;
 };
 

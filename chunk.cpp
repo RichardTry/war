@@ -33,7 +33,7 @@ void Chunk::Generate()
     long long keyBottom = coordsToKey(position.x, position.y + 1);
     long long keyBottomRight = coordsToKey(position.x + 1, position.y + 1);
 
-    sf::Vector2i perlinVectorRight, perlinVectorBottom, perlinVectorBottomRight;
+    Ogre::Vector2 perlinVectorRight, perlinVectorBottom, perlinVectorBottomRight;
 
     if (world.find(keyRight) != world.end())
         perlinVectorRight = world[keyRight].perlinVector;
@@ -356,7 +356,7 @@ void Chunk::Recalculate()
     }
     // mesh.AddEBO(indices);
 
-    sf::Uint8 pixels[CHUNK_SIZE*CHUNK_SIZE*4];
+    Uint8 pixels[CHUNK_SIZE*CHUNK_SIZE*4];
     for (int x = 0; x < CHUNK_SIZE; ++x) {
         for (int z = 0; z < CHUNK_SIZE; ++z) {
             pixels[CHUNK_SIZE*z*4 + x*4]     = height[x][z] > 5 ? (int)height[x][z] * 10 : 0; //tilelib[tiles[x][z].type].texture % 32;

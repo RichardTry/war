@@ -1,10 +1,10 @@
 #ifndef WINDOW_H_INCLUDED
 #define WINDOW_H_INCLUDED
 
-#include "SFML/Window.hpp"
+#include <Ogre.h>
 
-extern sf::Window window;
-extern sf::Vector2i window_center;
+extern Ogre::RenderWindow window;
+extern Ogre::Vector2 window_center;
 
 void InitWindow();
 

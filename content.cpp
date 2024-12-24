@@ -3,7 +3,7 @@
 
 std::string current_mod = "";
 
-// sf::Image atlas;
+// Image atlas;
 Ogre::Terrain::LayerInstanceList atlas;
 unsigned int tiles;
 std::unordered_map <std::string, unsigned int> texlib;
@@ -27,10 +27,10 @@ int Content::register_tile(lua_State * L)
     lua_getfield(L, 2, "texture");
     std::string texture = luaL_checkstring(L, -1);
     std::cout << name << " tile registered with ";
-    //textures.push_back(sf::Texture());
-    //tilelib[name].texture = new sf::Texture();
-    //tilelib[name].texture->loadFromFile("mods/" + current_mod + "/textures/" + texture);
-    //textures[textures.size() - 1].loadFromFile("mods/" + current_mod + "/textures/" + texture);
+    //textures.push_back(Ogre::Texture());
+    //tilelib[name].texture = new Ogre::Texture();
+    //tilelib[name].texture->loadImage(Ogre::Image::load(("mods/" + current_mod + "/textures/" + texture));
+    //textures[textures.size() - 1].loadImage(Ogre::Image::load(("mods/" + current_mod + "/textures/" + texture));
 
     Ogre::Terrain::LayerInstance layer = Ogre::Terrain::LayerInstance();
     layer.textureNames.push_back("mods/" + current_mod + "/textures/" + texture);
@@ -57,27 +57,28 @@ int Content::register_object(lua_State * L)
     std::string texture_left = luaL_checkstring(L, -2);
     std::string texture_right = luaL_checkstring(L, -1);
 
-    objlib[name].texture_up = new sf::Texture();
-    objlib[name].texture_up->loadFromFile("mods/" + current_mod + "/textures/" + texture_up);
-    objlib[name].texture_down = new sf::Texture();
-    objlib[name].texture_down->loadFromFile("mods/" + current_mod + "/textures/" + texture_down);
-    objlib[name].texture_left = new sf::Texture();
-    objlib[name].texture_left->loadFromFile("mods/" + current_mod + "/textures/" + texture_left);
-    objlib[name].texture_right = new sf::Texture();
-    objlib[name].texture_right->loadFromFile("mods/" + current_mod + "/textures/" + texture_right);
+    // TODO: uncomment OGRE
+    // objlib[name].texture_up = new Ogre::Texture();
+    // objlib[name].texture_up->loadImage(Ogre::Image::load("mods/" + current_mod + "/textures/" + texture_up, "kal"));
+    // objlib[name].texture_down = new Ogre::Texture();
+    // objlib[name].texture_down->loadImage(Ogre::Image::load("mods/" + current_mod + "/textures/" + texture_down));
+    // objlib[name].texture_left = new Ogre::Texture();
+    // objlib[name].texture_left->loadImage(Ogre::Image::load("mods/" + current_mod + "/textures/" + texture_left));
+    // objlib[name].texture_right = new Ogre::Texture();
+    // objlib[name].texture_right->loadImage(Ogre::Image::load("mods/" + current_mod + "/textures/" + texture_right));
 
     std::cout << "size...\n";
     lua_getfield(L, 2, "size");
     lua_getfield(L, -1, "x");
     lua_getfield(L, -2, "y");
-    sf::Vector2f spriteSize(lua_tonumber(L, -2), lua_tonumber(L, -1));
+    Ogre::Vector2f spriteSize(lua_tonumber(L, -2), lua_tonumber(L, -1));
     objlib[name].spriteSize = spriteSize;
 
     std::cout << "origin...\n";
     lua_getfield(L, 2, "origin");
     lua_getfield(L, -1, "x");
     lua_getfield(L, -2, "y");
-    sf::Vector2f spriteOrigin(lua_tonumber(L, -2), lua_tonumber(L, -1));
+    Ogre::Vector2f spriteOrigin(lua_tonumber(L, -2), lua_tonumber(L, -1));
     objlib[name].spriteOrigin = spriteOrigin;
 
     std::cout << "textures: ";

@@ -7,7 +7,7 @@
 class Object
 {
     public:
-        sf::Vector2i position;
+        Ogre::Vector2 position;
         unsigned char rotation;
         std::string contentID;
         Ogre::Entity mesh;
@@ -16,7 +16,7 @@ class Object
         Object(int x, int y, int rot, std::string ID);
 
         void update(const float & dt, Content * content);
-        void render(sf::RenderTarget * target, Content * content);
+        void render(Ogre::RenderTarget * target, Content * content);
 };
 
 #endif // OBJECT_H_INCLUDED

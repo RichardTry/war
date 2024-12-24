@@ -15,15 +15,16 @@
 class Chunk
 {
     public:
-    sf::Vector2i position;
+    Ogre::Vector2 position;
     //glm::vec2 perlinVector;
-    sf::Vector2i perlinVector;
+    Ogre::Vector2 perlinVector;
     bool generated;
     Tile tiles[CHUNK_SIZE][CHUNK_SIZE];
-    sf::Texture textures;
+    Ogre::Texture textures;
     float height[CHUNK_SIZE][CHUNK_SIZE];
     std::vector<Object> objects;
     std::vector<Unit> units;
+    std::unordered_map<long long, Chunk>& world;
 
     Ogre::Entity mesh;
 
